@@ -10,7 +10,7 @@ public class PlayerMove2D : MonoBehaviour
     private float yPositionMultiplier = 10f;                // Multiplier for adjusting the Sorting Layer in the attached game object's Sprite Renderer component, necessary to have sprites overlap
 
 
-    void Start()                                            // Upon the level's start, this script will make connections to other components attached to the same Player game object
+    void Awake()                                            // Upon the level's start, this script will make connections to other components attached to the same Player game object
     {
         rigby = GetComponent<Rigidbody2D>();                // Lets this script make a connection to the attached game object's Rigidbody 2D component 
         spriteRenderer = GetComponent<SpriteRenderer>();    // Lets this script make a connection to the attached game object's Sprite Renderer component
