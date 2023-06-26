@@ -1,0 +1,19 @@
+using UnityEngine;  // Necessary to use the methods and functions in the UnityEngine package
+
+
+public class FollowPlayerCamera : MonoBehaviour {
+	private GameObject player;
+	private Vector3 follow;
+
+
+	private void Awake()
+	{
+		player = GameObject.FindGameObjectWithTag("Player");
+        follow = transform.position - player.transform.position;
+    }
+
+
+	void LateUpdate () {
+		transform.position = player.transform.position + follow;
+	}
+}
