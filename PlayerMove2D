@@ -1,0 +1,46 @@
+using UnityEngine;                                          // Necessary to use the methods and functions in the UnityEngine package
+
+
+public class PlayerMove2D : MonoBehaviour
+{
+    private float moveSpeed = 5f;                           // The speed at which the attached Player game object will move (Ensure the Tag of the game object is: Player), necessary for movement
+    private SpriteRenderer spriteRenderer;                  // The Sprite Renderer component also attached to the Player game object, necessary to adjust y position and flip the sprite image on its x axis
+    private Rigidbody2D rigby;                              // The Rigidbody 2D component also attached to the Player game object, necessary for movement
+    private Vector2 movement;                               // The direction the player will move based on points in space and a calculation, necessary for movement
+    private float yPositionMultiplier = 10f;                // Multiplier for adjusting the Sorting Layer in the attached game object's Sprite Renderer component, necessary to have sprites overlap
+
+
+    void Start()                                            // Upon the level's start, this script will make connections to other components attached to the same Player game object
+    {
+        rigby = GetComponent<Rigidbody2D>();                // Lets this script make a connection to the attached game object's Rigidbody 2D component 
+        spriteRenderer = GetComponent<SpriteRenderer>();    // Lets this script make a connection to the attached game object's Sprite Renderer component
+    }
+
+
+    private void LateUpdate()
+    {
+        // Receives input from the player to control the movement based on simple controls for Horizontal and Vertical axes
+        // In the Unity Editor: Edit > Project Settings > Input Manager > Axes > Horizontal AND Vertical to find and set the desired inputs
+        movement.x = Input.GetAxisRaw("Horizontal"); 
+        movement.y = Input.GetAxisRaw("Vertical");
+
+        // Normalizes the vector 2, so that it prevents faster diagonally movement (not quite sure how this works because math, needs more research...)
+        movement.Normalize();
+
+        // Flips the sprite image on its x axis to face the direction of movement (there's probably a cheaper way if the if statement get expensive, needs more research...)
+        if (movement.x < 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+        else if (movement.x > 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+
+        // Adjusts the sorting layer in the attached Player game object's Sprite Renderer component based on the y position of the Player game object's transform, so lower objects appear in front of higher objects
+        spriteRenderer.sortingOrder = Mathf.RoundToInt(transform.position.y * -yPositionMultiplier);
+
+        // Finally, move the Player game object (using the movement direction input by the player multiplied by the moveSpeed and time)
+        rigby.MovePosition(rigby.position + movement * moveSpeed * Time.fixedDeltaTime);
+    }
+}
